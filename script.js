@@ -23,18 +23,23 @@ function updateParallax() {
   const hero = document.querySelector(".hero");
   const scrolled = window.pageYOffset;
   const heroHeight = hero ? hero.offsetHeight : 0;
+  const isMobile = window.innerWidth <= 768;
 
   // Navbar effect
   if (scrolled > 50) {
     navbar.classList.add("scrolled");
+    0;
   } else {
     navbar.classList.remove("scrolled");
   }
 
-  // Parallax effect for hero background (only when hero is visible)
-  if (hero && scrolled < heroHeight) {
+  // Parallax effect for hero background (only when hero is visible and not on mobile)
+  if (hero && scrolled < heroHeight && !isMobile) {
     const rate = scrolled * -0.3;
     hero.style.transform = `translate3d(0, ${rate}px, 0)`;
+  } else if (hero && isMobile) {
+    // Reset transform on mobile
+    hero.style.transform = "none";
   }
 
   ticking = false;
