@@ -906,6 +906,13 @@ p {
     /* Optimize background for mobile */
     background-size: cover;
     background-position: center 20%; /* Adjust position for mobile */
+    /* Force hardware acceleration and proper rendering on mobile */
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    /* Ensure background renders immediately */
+    will-change: background-image;
   }
 
   .hero-content {

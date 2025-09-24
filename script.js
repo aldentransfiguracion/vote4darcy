@@ -1,3 +1,30 @@
+// Preload hero image for mobile
+function preloadHeroImage() {
+  const heroImage = new Image();
+  heroImage.src = "assets/DarcyFamily.jpg";
+  heroImage.onload = function () {
+    // Force repaint on mobile after image loads
+    const hero = document.querySelector(".hero");
+    if (hero) {
+      hero.style.backgroundImage = `url("${heroImage.src}")`;
+      // Force a repaint
+      hero.style.transform = hero.style.transform || "translateZ(0)";
+    }
+  };
+}
+
+// Fix for iOS Safari background image rendering
+function fixMobileBackgroundImage() {
+  const hero = document.querySelector(".hero");
+  if (hero && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+    // Force background image to render on mobile
+    hero.style.backgroundImage =
+      hero.style.backgroundImage || 'url("assets/DarcyFamily.jpg")';
+    hero.style.webkitTransform = "translateZ(0)";
+    hero.style.transform = "translateZ(0)";
+  }
+}
+
 // Mobile Navigation Toggle
 const navToggle = document.getElementById("nav-toggle");
 const navMenu = document.getElementById("nav-menu");
@@ -189,6 +216,12 @@ const observer = new IntersectionObserver((entries) => {
 
 // Add fade-in class to elements and observe them
 document.addEventListener("DOMContentLoaded", () => {
+  // Preload hero image for mobile Safari fix
+  preloadHeroImage();
+
+  // Fix mobile background image rendering
+  fixMobileBackgroundImage();
+
   const elementsToAnimate = document.querySelectorAll(
     ".issue-card, .endorsement, .event-card, .about-content, .hero-stats"
   );
@@ -198,6 +231,15 @@ document.addEventListener("DOMContentLoaded", () => {
     observer.observe(element);
   });
 });
+
+// Additional fix for iOS Safari - force render on first touch
+document.addEventListener(
+  "touchstart",
+  function () {
+    fixMobileBackgroundImage();
+  },
+  { once: true }
+);
 
 // Social Media Share Functionality (if social links exist)
 const socialLinks = document.querySelectorAll(".social-link");
